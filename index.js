@@ -21,11 +21,13 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint... 
-app.get("/api/:date", (req, res) => {
-  console.log("1", req.params.date);
+app.get("/api/:date?", (req, res) => {
   
   let time
-  if (String(req.params.date).match(/^[0-9]*$/g)) {
+
+  if (req.params.date === undefined) {
+    time = new Date()
+  } else if (String(req.params.date).match(/^[0-9]*$/g)) {
     time = new Date(parseInt(req.params.date));
   } else {
     time = new Date(req.params.date);
@@ -37,13 +39,6 @@ app.get("/api/:date", (req, res) => {
     res.json({ unix: Date.parse(time), utc: time.toUTCString() });
   }
 });
-
-app.get("/api", (req, res) => {
-  let time = new Date()
-  res.json({ unix: Date.parse(time), utc: time.toUTCString() });
-})
-
-
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
